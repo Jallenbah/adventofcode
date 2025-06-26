@@ -404,3 +404,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# AoC project specific
+/src/inputs/*
+!/src/inputs/README.md
