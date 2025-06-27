@@ -8,28 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="2016\" />
-    <Folder Include="2017\" />
-    <Folder Include="2018\" />
-    <Folder Include="2019\" />
-    <Folder Include="2020\" />
-    <Folder Include="2021\" />
-    <Folder Include="2022\" />
-    <Folder Include="2023\" />
-    <Folder Include="2024\" />
-    <Folder Include="inputs\2015\" />
-    <Folder Include="inputs\2016\" />
-    <Folder Include="inputs\2017\" />
-    <Folder Include="inputs\2018\" />
-    <Folder Include="inputs\2019\" />
-    <Folder Include="inputs\2020\" />
-    <Folder Include="inputs\2021\" />
-    <Folder Include="inputs\2022\" />
-    <Folder Include="inputs\2023\" />
-    <Folder Include="inputs\2024\" />
-  </ItemGroup>
-
-  <ItemGroup>
 	<Content Include="inputs\**">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
