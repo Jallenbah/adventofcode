@@ -11,11 +11,21 @@ internal class Day7 : ISolution
         var wireDefinitionStrings = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var wireDefinitions = wireDefinitionStrings.Select(GetWireDefinition).ToList();
 
-        var wireValues = EmulateCircuit(wireDefinitions);
+        var results = new Dictionary<string, ushort>(wireDefinitions.Count);
 
-        var part1Solution = wireValues["a"];
+        EmulateCircuit(wireDefinitions, results);
 
-        return $"Part 1: {part1Solution}";
+        var part1Solution = results["a"];
+
+        results.Clear();
+        results.Add("b", part1Solution);
+        EmulateCircuit(wireDefinitions, results);
+
+        var part2Solution = results["a"];
+
+        return
+            $"Part 1: {part1Solution}\n" +
+            $"Part 2: {part2Solution}";
     }
 
     private Regex _wireAndExpressionRegex = new Regex(@"(?<expr>.+) -> (?<wire>\w+)");
@@ -72,10 +82,8 @@ internal class Day7 : ISolution
         }
     }
 
-    private Dictionary<string, ushort> EmulateCircuit(List<WireDefinition> wireDefinitions)
+    private void EmulateCircuit(List<WireDefinition> wireDefinitions, Dictionary<string, ushort> results)
     {
-        var results = new Dictionary<string, ushort>(wireDefinitions.Count);
-
         var previousUnresolvedDefinitionCount = 0;
         while (results.Count < wireDefinitions.Count)
         {
@@ -110,8 +118,6 @@ internal class Day7 : ISolution
                 }
             }
         }
-
-        return results;
 
         ushort GetValue(string arg) => ushort.TryParse(arg, out var val) ? val : results[arg];
     }
