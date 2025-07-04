@@ -10,18 +10,19 @@ internal class Day9 : ISolution
     {
         var distances = GetDistanceDictionary(input);
 
-        var result = FindShortestPath(distances);
+        var result = FindShortestAndLongestPaths(distances);
 
         return $"{result}";
     }
 
-    private int FindShortestPath(Dictionary<string, Dictionary<string, int>> distances)
+    record ShortestLongest(int Shortest, int Longest);
+    private ShortestLongest FindShortestAndLongestPaths(Dictionary<string, Dictionary<string, int>> distances)
     {
         var locations = distances.Keys.ToList();
 
-        return RecursivePathCheck(null, locations, 0);
+        return RecursivePathCheck(null, locations, new ShortestLongest(0, 0));
 
-        int RecursivePathCheck(string? previousLocation, List<string> unvistedLocations, int totalDistance)
+        ShortestLongest RecursivePathCheck(string? thisLocation, List<string> unvistedLocations, ShortestLongest totalDistance)
         {
             if (unvistedLocations.Count == 0)
             {
@@ -29,14 +30,20 @@ internal class Day9 : ISolution
             }
 
             var shortestDistance = int.MaxValue;
-            foreach (var thisLocation in unvistedLocations)
+            var longestDistance = 0;
+            foreach (var nextLocation in unvistedLocations)
             {
-                var locationsMinusThisOne = unvistedLocations.Where(l => l != thisLocation).ToList();
-                var thisDistance = previousLocation == null ? 0 : distances[previousLocation][thisLocation];
-                var pathDistance = thisDistance + RecursivePathCheck(thisLocation, locationsMinusThisOne, totalDistance);
-                shortestDistance = pathDistance < shortestDistance ? pathDistance : shortestDistance;
+                var locationsExceptThisOne = unvistedLocations.Where(l => l != nextLocation).ToList();
+                var distanceToNextLocation = thisLocation == null ? 0 : distances[thisLocation][nextLocation];
+                var pathDistances = RecursivePathCheck(nextLocation, locationsExceptThisOne, totalDistance);
+
+                var shortestPath = distanceToNextLocation + pathDistances.Shortest;
+                var longestPath = distanceToNextLocation + pathDistances.Longest;
+
+                shortestDistance = shortestPath < shortestDistance ? shortestPath : shortestDistance;
+                longestDistance = longestPath > longestDistance ? longestPath : longestDistance;
             }
-            return shortestDistance;
+            return new ShortestLongest(shortestDistance, longestDistance);
 
         }
     }
