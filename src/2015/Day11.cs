@@ -13,17 +13,26 @@ internal class Day11 : ISolution
 
     public string Solve(string input)
     {
-        var currentPassword = input;
+        var part1Solution = FindNextPassword(input);
+        var part2Solution = FindNextPassword(part1Solution);
+
+        return
+            $"Part 1: {part1Solution}\n" +
+            $"Part 2: {part2Solution}";
+    }
+
+    private string FindNextPassword(string initialPassword)
+    {
+        var currentPassword = IncrementPassword(initialPassword);
         while (!DoesPasswordMeetRules(currentPassword))
         {
             currentPassword = IncrementPassword(currentPassword);
-            if (currentPassword == input)
+            if (currentPassword == initialPassword)
             {
                 throw new Exception("We've tried every string and none of them meet the requirements...");
             }
         }
-
-        return $"Part 1: {currentPassword}";
+        return currentPassword;
     }
 
     private bool DoesPasswordMeetRules(string password)
