@@ -24,11 +24,21 @@ internal class Day14 : ISolution
             {
                 reindeer.Progress1Second();
             }
+
+            var leadingDistance = reindeers.Max(r => r.Distance);
+            var reindeerInLead = reindeers.Where(r => r.Distance == leadingDistance);
+            foreach (var reindeer in reindeerInLead)
+            {
+                reindeer.GivePoint();
+            }
         }
 
-        var winningReindeer = reindeers.OrderByDescending(r => r.Distance).First();
+        var reindeerWithFurthestDistance = reindeers.OrderByDescending(r => r.Distance).First();
+        var reindeerWithMostPoints = reindeers.OrderByDescending(r => r.Points).First();
 
-        return $"{winningReindeer.Distance}";
+        return
+            $"Part 1: {reindeerWithFurthestDistance.Distance}\n" +
+            $"Part 2: {reindeerWithMostPoints.Points}";
     }
 
     private Regex _inputStatementRegex =
@@ -37,6 +47,7 @@ internal class Day14 : ISolution
     private class Reindeer(string name, int speed, int flyTime, int restTime)
     {
         public int Distance { get; private set; } = 0;
+        public int Points { get; private set; } = 0;
 
         private ReindeerState _state = ReindeerState.Moving;
         private int _secondsInCurrentState = 0;
@@ -63,6 +74,8 @@ internal class Day14 : ISolution
                     break;
             }
         }
+
+        public void GivePoint() => Points++;
     }
 
     private enum ReindeerState
